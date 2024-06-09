@@ -6,15 +6,15 @@ st.write("""
 # SQL SRS
 Spaced Repetition System SQL practice
 """)
+with st.sidebar:
+    option = st.selectbox(
+        "What would you like to review?"
+        , ["Joins", "GroupBy", "Window Functions"],
+        index=None,
+        placeholder='Select a theme'
+    )
 
-option = st.selectbox(
-    "What would you like to review?"
-    , ["Joins", "GroupBy", "Window Functions"],
-    index=None,
-    placeholder='Select a theme'
-)
-
-st.write('You selected:', option)
+    st.write('You selected:', option)
 
 query = st.text_input('Enter your sql query')
 
