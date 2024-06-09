@@ -2,6 +2,20 @@ import streamlit as st
 import pandas as pd
 import duckdb
 
+st.write("""
+# SQL SRS
+Spaced Repetition System SQL practice
+""")
+
+option = st.selectbox(
+    "What would you like to review?"
+    , ["Joins", "GroupBy", "Window Functions"],
+    index=None,
+    placeholder='Select a theme'
+)
+
+st.write('You selected:', option)
+
 query = st.text_input('Enter your sql query')
 
 df = pd.DataFrame({
