@@ -1,38 +1,70 @@
 import streamlit as st
 import pandas as pd
 import duckdb
+import io
 
-st.write("""
-# SQL SRS
-Spaced Repetition System SQL practice
-""")
+csv = """
+beverage,price
+orange juice,2.5
+Expresso,2
+Tea,3
+"""
 
-option = st.selectbox(
-    "What would you like to review?"
-    , ["Joins", "GroupBy", "Window Functions"],
-    index=None,
-    placeholder='Select a theme'
-)
+beverages = pd.read_csv(io.StringIO(csv))
 
-st.write('You selected:', option)
+csv2 = """
+food_item,food_price
+cookie juice,2.5
+chocolatine,2
+muffin,3
+"""
 
-query = st.text_input('Enter your sql query')
+food_items = pd.read_csv(io.StringIO(csv2))
 
-df = pd.DataFrame({
-    'col1': [1, 2, 3, 4],
-    'col2': [5, 6, 7, 8]
-})
+answer = """
+SELECT * FROM beverages
+CROSS JOIN food_items
+"""
 
-st.write('Please note that table name is df')
-st.write('The entered query is:', query)
+solution = duckdb.sql(answer).df()
 
-st.write('The initial dataframe is:')
-st.dataframe(df)
+tab1, tab2 = st.tabs(['Tables', 'Solution'])
 
+with st.sidebar:
+    option = st.selectbox(
+        "What would you like to review?"
+        , ["Joins", "GroupBy", "Window Functions"],
+        index=None,
+        placeholder='Select a theme'
+    )
 
-queried_df = duckdb.query(query).to_df()
+    st.write('You selected:', option)
 
-st.write('The queried dataframe is:', queried_df)
+with tab1:
+    st.write("""
+    # SQL SRS
+    Spaced Repetition System SQL practice
+    """)
 
+    query = st.text_input('Enter your sql query')
 
+    st.write('The beverages table is:')
+    st.dataframe(beverages)
 
+    st.write('The food_items table is:')
+    st.dataframe(food_items)
+
+    if query:
+        st.write('The entered query is:', query)
+        result = duckdb.query(query).to_df()
+        st.write('The queried dataframe is:', result)
+
+    st.write("The expected output is:", solution)
+
+with tab2:
+    st.write("""
+    # SQL SRS
+    Spaced Repetition System SQL practice
+    """)
+    st.write('The solution is:', answer)
+    st.dataframe(solution)
