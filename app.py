@@ -59,7 +59,7 @@ with tab1:
         result = duckdb.query(query).to_df()
         st.write('The queried dataframe is:', result)
 
-    st.write("The expected result is:", solution)
+    st.write("The expected output is:", solution)
 
 with tab2:
     st.write("""
