@@ -3,7 +3,6 @@ import pandas as pd
 import duckdb
 import io
 
-
 csv = """
 beverage,price
 orange juice,2.5
