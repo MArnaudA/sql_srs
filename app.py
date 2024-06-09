@@ -29,14 +29,15 @@ CROSS JOIN food_items
 solution = duckdb.sql(answer).df()
 
 tab1, tab2 = st.tabs(['Tables', 'Solution'])
+with st.sidebar:
+    option = st.selectbox(
+        "What would you like to review?"
+        , ["Joins", "GroupBy", "Window Functions"],
+        index=None,
+        placeholder='Select a theme'
+    )
 
-option = st.selectbox(
-    "What would you like to review?"
-    , ["Joins", "GroupBy", "Window Functions"],
-    index=None,
-    placeholder='Select a theme'
-)
-
+    st.write('You selected:', option)
 st.write('You selected:', option)
 
 with tab1:
