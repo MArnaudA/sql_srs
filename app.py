@@ -1,7 +1,8 @@
-import streamlit as st
-import pandas as pd
-import duckdb
 import io
+
+import duckdb
+import pandas as pd
+import streamlit as st
 
 csv = """
 beverage,price
