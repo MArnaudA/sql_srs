@@ -1,75 +1,70 @@
-import io
+import ast
 
 import duckdb
-import pandas as pd
 import streamlit as st
 
-csv = """
-beverage,price
-orange juice,2.5
-Expresso,2
-Tea,3
-"""
-
-beverages = pd.read_csv(io.StringIO(csv))
-
-csv2 = """
-food_item,food_price
-cookie juice,2.5
-chocolatine,2
-muffin,3
-"""
-
-food_items = pd.read_csv(io.StringIO(csv2))
-
-answer = """
-SELECT * FROM beverages
-CROSS JOIN food_items
-"""
-
-solution = duckdb.sql(answer).df()
-
-tab1, tab2 = st.tabs(["Tables", "Solution"])
+conn = duckdb.connect(database="data/exercises_sql_tables.duckdb", read_only=False)
 
 with st.sidebar:
     option = st.selectbox(
         "What would you like to review?",
-        ["Joins", "GroupBy", "Window Functions"],
+        ["Cross Joins", "GroupBy", "Window Functions"],
         index=None,
         placeholder="Select a theme",
     )
+    if option:
+        exercises = conn.execute(
+            f"SELECT * FROM memory_state WHERE theme = '{option}'"
+        ).df()
+        st.write(exercises)
+        exercise_name = exercises["exercise_name"][0]
+        with open(f"solutions/{exercise_name}.sql", "r") as file:
+            solution_query = file.read()
+        solution_df = conn.execute(solution_query).df()
 
-    st.write("You selected:", option)
+st.write(
+    """
+    # SQL SRS
+    Spaced Repetition System SQL practice
+    """
+)
+
+query = st.text_input("Enter your sql query")
+
+tab1, tab2 = st.tabs(["Tables", "Solution"])
 
 with tab1:
-    st.write(
-        """
-    # SQL SRS
-    Spaced Repetition System SQL practice
-    """
-    )
 
-    query = st.text_input("Enter your sql query")
+    if option:
+        for table in exercises["tables"][0]:
+            df = conn.execute(f"SELECT * FROM {table}").df()
+            st.write(f"The {table} table is:")
+            st.dataframe(df)
 
-    st.write("The beverages table is:")
-    st.dataframe(beverages)
-
-    st.write("The food_items table is:")
-    st.dataframe(food_items)
+    else:
+        st.write("Choose a theme to review")
 
     if query:
-        st.write("The entered query is:", query)
-        result = duckdb.query(query).to_df()
+        result = conn.execute(query).df()
         st.write("The queried dataframe is:", result)
 
-    st.write("The expected output is:", solution)
+        if result.shape[0] != solution_df.shape[0]:
+            st.write("The number of rows is incorrect")
+        elif result.shape[1] != solution_df.shape[1]:
+            st.write("The number of columns is incorrect")
+        elif not result.compare(solution_df).empty:
+            st.write("The content is incorrect")
+        else:
+            st.write("The query is correct !")
+
+    if option:
+        st.write("The expected output is:")
+        st.dataframe(solution_df)
 
 with tab2:
-    st.write(
-        """
-    # SQL SRS
-    Spaced Repetition System SQL practice
-    """
-    )
-    st.write("The solution is:", answer)
-    st.dataframe(solution)
+    if option:
+        if query:
+            result = conn.execute(query).df()
+            st.write("The queried dataframe is:", result)
+        st.write("The solution is:", solution_query)
+        st.dataframe(solution_df)
