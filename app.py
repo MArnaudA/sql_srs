@@ -3,7 +3,6 @@ import ast
 import duckdb
 import streamlit as st
 
-
 conn = duckdb.connect(database="data/exercises_sql_tables.duckdb", read_only=False)
 
 with st.sidebar:
@@ -14,7 +13,9 @@ with st.sidebar:
         placeholder="Select a theme",
     )
     if option:
-        exercises = conn.execute(f"SELECT * FROM memory_state WHERE theme = '{option}'").df()
+        exercises = conn.execute(
+            f"SELECT * FROM memory_state WHERE theme = '{option}'"
+        ).df()
         st.write(exercises)
         exercise_name = exercises["exercise_name"][0]
         with open(f"solutions/{exercise_name}.sql", "r") as file:
@@ -22,18 +23,18 @@ with st.sidebar:
         solution_df = conn.execute(solution_query).df()
 
 st.write(
-        """
+    """
     # SQL SRS
     Spaced Repetition System SQL practice
     """
-    )
+)
 
 query = st.text_input("Enter your sql query")
 
 tab1, tab2 = st.tabs(["Tables", "Solution"])
 
 with tab1:
-    
+
     if option:
         for table in exercises["tables"][0]:
             df = conn.execute(f"SELECT * FROM {table}").df()
@@ -42,8 +43,6 @@ with tab1:
 
     else:
         st.write("Choose a theme to review")
-    
-    
 
     if query:
         result = conn.execute(query).df()
@@ -58,7 +57,6 @@ with tab1:
         else:
             st.write("The query is correct !")
 
-    
     if option:
         st.write("The expected output is:")
         st.dataframe(solution_df)
