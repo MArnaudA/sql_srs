@@ -64,4 +64,4 @@ Levis
 """
 
 trademarks = pd.read_csv(io.StringIO(csv4))
-conn.execute("CREATE TABLE IF NOT EXISTS trademark AS SELECT * FROM trademark")
+conn.execute("CREATE TABLE IF NOT EXISTS trademarks AS SELECT * FROM trademarks")
