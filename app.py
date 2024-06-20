@@ -1,7 +1,16 @@
-import ast
+import os
+import logging
 
 import duckdb
 import streamlit as st
+
+if "data" not in os.listdir():
+    logging.error(os.listdir())
+    logging.error("Creating folder data")
+    os.mkdir("data")
+
+if "exercises_sql_tables.duckdb" not in os.listdir("data"):
+    exec(open("data/init_db.py").read())
 
 conn = duckdb.connect(database="data/exercises_sql_tables.duckdb", read_only=False)
 
