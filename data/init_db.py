@@ -14,6 +14,10 @@ data = {
     "exercise_name": ["beverages_and_food", "sizes_and_trademarks"],
     "tables": [["beverages", "food_items"], ["sizes", "trademark"]],
     "last_reviewed": ["2022-09-01", "2021-09-01"],
+    "question": [
+        "Query all the combinations of beverages and food items", 
+        "Query all the combinations of sizes and trademarks"
+        ]
 }
 memory_state_df = pd.DataFrame(data)
 conn.execute(

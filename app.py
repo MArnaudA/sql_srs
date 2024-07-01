@@ -68,8 +68,8 @@ def show_exercise(conn, option):
                 WHERE theme = '{option}' ORDER BY last_reviewed
                 """
                 ).df()
-    st.write(exercises)
-    return exercises
+    question = exercises["question"][0]
+    return exercises, question
 
 def show_exercise_no_option(conn):
     """
@@ -82,7 +82,8 @@ def show_exercise_no_option(conn):
         None
     """
     exercise = conn.execute("SELECT * FROM memory_state ORDER BY last_reviewed").df()
-    return exercise
+    question = exercise["question"][0]
+    return exercise, question
 
 def get_exercise_solution(conn, exercise_name):
     """
@@ -128,12 +129,13 @@ def verify_query(conn, solution_df, query):
 conn = duckdb.connect(database="data/exercises_sql_tables.duckdb", read_only=False)
 
 with st.sidebar:
-
     option = get_selected_theme(conn)
     if option:
-        exercises = show_exercise(conn, option)
+        # show exercises among the selected theme
+        exercises, question = show_exercise(conn, option)
     else:
-        exercises = show_exercise_no_option(conn)
+        # show oldest reviewed exercise among all exercises
+        exercises, question = show_exercise_no_option(conn)
     exercise_name = exercises["exercise_name"][0]
     solution_query, solution_df = get_exercise_solution(conn, exercise_name)
 
@@ -148,8 +150,9 @@ query = st.text_input("Enter your sql query")
 
 tab1, tab2 = st.tabs(["Tables", "Solution"])
 
-with tab1:
-
+with tab1: 
+    
+    st.write("Question : ", question)
     get_tables(conn, exercises)
 
     if query:
@@ -160,11 +163,6 @@ with tab1:
 
 with tab2:
     if query:
-        try:
-            result = conn.execute(query).df()
-        except (AttributeError, duckdb.ParserException) as e:
-            st.write("Oops! There is a syntax error in your query. Please try again.")
-            result = None
-        st.write("The queried dataframe is:", result)
+        verify_query(conn, solution_df, query)
     st.write("The solution is:", solution_query)
     st.dataframe(solution_df)
