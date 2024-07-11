@@ -10,10 +10,46 @@ conn = duckdb.connect(database="data/exercises_sql_tables.duckdb", read_only=Fal
 # ------------------------------------------------------------------
 
 data = {
-    "theme": ["Cross Joins", "Cross Joins"],
-    "exercise_name": ["beverages_and_food", "sizes_and_trademarks"],
-    "tables": [["beverages", "food_items"], ["sizes", "trademark"]],
-    "last_reviewed": ["2022-09-01", "2021-09-01"],
+    "theme": [
+        "Cross Joins",
+        "Cross Joins",
+        "Inner Joins",
+        "Inner Joins",
+        "Inner Joins",
+        "Left Joins",
+    ],
+    "exercise_name": [
+        "beverages_and_food",
+        "sizes_and_trademarks",
+        "order_data_and_details",
+        "detailed_orders_and_clients",
+        "detailed_orders_clients_and_products",
+        "left_join_order_data_and_details",
+    ],
+    "tables": [
+        ["beverages", "food_items"],
+        ["sizes", "trademark"],
+        ["orders", "order_details"],
+        ["orders", "order_details", "customers"],
+        ["orders", "order_details", "customers", "products"],
+        ["orders", "order_details"],
+    ],
+    "last_reviewed": [
+        "2021-09-01",
+        "2021-09-01",
+        "2021-09-01",
+        "2021-09-01",
+        "2021-09-01",
+        "2021-09-01",
+    ],
+    "question": [
+        "Query all the combinations of beverages and food items",
+        "Query all the combinations of sizes and trademarks",
+        "Join the orders and order_details tables",
+        "Get the detailed orders and clients information (Tips : CTE to join orders and order_details)",
+        "Get the detailed orders and clients information with products (Tips : CTE to join )",
+        "Get details of all orders, even if they don't have any details",
+    ],
 }
 memory_state_df = pd.DataFrame(data)
 conn.execute(
@@ -65,3 +101,44 @@ Levis
 
 trademarks = pd.read_csv(io.StringIO(csv4))
 conn.execute("CREATE TABLE IF NOT EXISTS trademarks AS SELECT * FROM trademarks")
+
+# ------------------------------------------------------------------
+# INNER JOIN EXERCISES
+# ------------------------------------------------------------------
+
+# Exercise 1
+
+orders_data = {"order_id": [1, 2, 3, 4, 5], "customer_id": [101, 102, 103, 104, 105]}
+orders = pd.DataFrame(orders_data)
+conn.execute("CREATE TABLE IF NOT EXISTS orders AS SELECT * FROM orders")
+
+customers_data = {
+    "customer_id": [101, 102, 103, 104, 105, 106],
+    "customer_name": [
+        "Toufik",
+        "Daniel",
+        "Tancrède",
+        "Kaouter",
+        "Jean-Nicolas",
+        "David",
+    ],
+}
+customers = pd.DataFrame(customers_data)
+conn.execute("CREATE TABLE IF NOT EXISTS customers AS SELECT * FROM customers")
+
+p_names = ["Laptop", "Ipad", "Livre", "Petitos"]
+products_data = {
+    "product_id": [101, 103, 104, 105],
+    "product_name": p_names,
+    "product_price": [800, 400, 30, 2],
+}
+products = pd.DataFrame(products_data)
+conn.execute("CREATE TABLE IF NOT EXISTS products AS SELECT * FROM products")
+
+order_details_data = {
+    "order_id": [1, 2, 3, 4, 5],
+    "product_id": [102, 104, 101, 103, 105],
+    "quantity": [2, 1, 3, 2, 1],
+}
+order_details = pd.DataFrame(order_details_data)
+conn.execute("CREATE TABLE IF NOT EXISTS order_details AS SELECT * FROM order_details")
