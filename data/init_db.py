@@ -47,7 +47,7 @@ data = {
         "Query all the combinations of sizes and trademarks",
         "Join the orders and order_details tables",
         "Get the detailed orders and clients information (Tips : CTE to join orders and order_details)",
-        "Get the detailed orders and clients information with products (Tips : CTE to join )",
+        "Get the detailed orders and clients information with products (Tips : 2 CTE to first join orders and order_details as detailed_orders, then detailed orders with clients info)",
         "Get details of all orders, even if they don't have any details",
     ],
 }
