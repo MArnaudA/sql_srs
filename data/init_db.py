@@ -16,6 +16,7 @@ data = {
         "Inner Joins",
         "Inner Joins",
         "Inner Joins",
+        "Left Joins",
     ],
     "exercise_name": [
         "beverages_and_food",
@@ -23,6 +24,7 @@ data = {
         "order_data_and_details",
         "detailed_orders_and_clients",
         "detailed_orders_clients_and_products",
+        "left_join_order_data_and_details",
     ],
     "tables": [
         ["beverages", "food_items"],
@@ -30,8 +32,10 @@ data = {
         ["orders", "order_details"],
         ["orders", "order_details", "customers"],
         ["orders", "order_details", "customers", "products"],
+        ["orders", "order_details"],
     ],
     "last_reviewed": [
+        "2021-09-01",
         "2021-09-01",
         "2021-09-01",
         "2021-09-01",
@@ -42,8 +46,9 @@ data = {
         "Query all the combinations of beverages and food items",
         "Query all the combinations of sizes and trademarks",
         "Join the orders and order_details tables",
-        "Get the detailed orders and clients information (Tips : CTE)",
-        "Get the detailed orders and clients information with products (Tips : CTE)",
+        "Get the detailed orders and clients information (Tips : CTE to join orders and order_details)",
+        "Get the detailed orders and clients information with products (Tips : CTE to join )",
+        "Get details of all orders, even if they don't have any details",
     ],
 }
 memory_state_df = pd.DataFrame(data)

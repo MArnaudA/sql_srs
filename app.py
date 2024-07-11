@@ -16,6 +16,7 @@ if "exercises_sql_tables.duckdb" not in os.listdir("data"):
 
 # ------------- Defined functions -------------
 
+
 def get_tables(conn, exercises):
     """
     Display tables of the selected exercise
@@ -31,6 +32,7 @@ def get_tables(conn, exercises):
         df = conn.execute(f"SELECT * FROM {table}").df()
         st.write(f"The {table} table is:")
         st.dataframe(df)
+
 
 def get_selected_theme(conn):
     """
@@ -52,6 +54,7 @@ def get_selected_theme(conn):
     )
     return option
 
+
 def show_exercise(conn, option):
     """
     Retrieves exercise from the database based on the specified theme.
@@ -64,12 +67,13 @@ def show_exercise(conn, option):
         DataFrame: A DataFrame containing the retrieved exercises.
     """
     exercises = conn.execute(
-                f"""SELECT * FROM memory_state 
+        f"""SELECT * FROM memory_state 
                 WHERE theme = '{option}' ORDER BY last_reviewed
                 """
-                ).df()
+    ).df()
     question = exercises["question"][0]
     return exercises, question
+
 
 def show_exercise_no_option(conn):
     """
@@ -84,6 +88,7 @@ def show_exercise_no_option(conn):
     exercise = conn.execute("SELECT * FROM memory_state ORDER BY last_reviewed").df()
     question = exercise["question"][0]
     return exercise, question
+
 
 def get_exercise_solution(conn, exercise_name):
     """
@@ -101,6 +106,7 @@ def get_exercise_solution(conn, exercise_name):
     solution_df = conn.execute(solution_query).df()
     return solution_query, solution_df
 
+
 def verify_query(conn, solution_df, query):
     try:
         result = conn.execute(query).df()
@@ -116,12 +122,10 @@ def verify_query(conn, solution_df, query):
 
         else:
             st.write("The query is correct !")
-            
 
     except (AttributeError, duckdb.ParserException) as e:
         st.write("Oops! There is a syntax error in your query. Please try again.")
         result = None
-    
 
 
 # ------------- Streamlit app -------------
@@ -150,8 +154,8 @@ query = st.text_input("Enter your sql query")
 
 tab1, tab2 = st.tabs(["Tables", "Solution"])
 
-with tab1: 
-    
+with tab1:
+
     st.write("Question : ", question)
     get_tables(conn, exercises)
 
