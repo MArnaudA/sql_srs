@@ -17,6 +17,8 @@ data = {
         "Inner Joins",
         "Inner Joins",
         "Left Joins",
+        "Left Joins",
+        "Left Joins"
     ],
     "exercise_name": [
         "beverages_and_food",
@@ -25,6 +27,8 @@ data = {
         "detailed_orders_and_clients",
         "detailed_orders_clients_and_products",
         "left_join_order_data_and_details",
+        "left_join_detailed_orders_and_clients",
+        "left_join_detailed_orders_clients_and_products"
     ],
     "tables": [
         ["beverages", "food_items"],
@@ -33,6 +37,8 @@ data = {
         ["orders", "order_details", "customers"],
         ["orders", "order_details", "customers", "products"],
         ["orders", "order_details"],
+        ["orders", "order_details", "customers"],
+        ["orders", "order_details", "customers", "products"]
     ],
     "last_reviewed": [
         "2021-09-01",
@@ -41,14 +47,18 @@ data = {
         "2021-09-01",
         "2021-09-01",
         "2021-09-01",
+        "2021-09-01",
+        "2021-09-01"
     ],
     "question": [
-        "Query all the combinations of beverages and food items",
-        "Query all the combinations of sizes and trademarks",
-        "Join the orders and order_details tables",
-        "Get the detailed orders and clients information (Tips : CTE to join orders and order_details)",
-        "Get the detailed orders and clients information with products (Tips : 2 CTE to first join orders and order_details as detailed_orders, then detailed orders with clients info)",
-        "Get details of all orders, even if they don't have any details",
+        "Query all the combinations of beverages and food items.",
+        "Query all the combinations of sizes and trademarks.",
+        "Join the orders and order_details tables.",
+        "Get the detailed orders and clients information (Tips : CTE to join orders and order_details).",
+        "Get the detailed orders and clients information with products (Tips : 2 CTE to first join orders and order_details as detailed_orders, then detailed orders with clients info).",
+        "Get details of all orders, even if they don't have any details.",
+        "Get details on customers and detailed pieces of information about their orders, even if they don't have any orders (Tips : CTE to join orders and order_details).",
+        "Get details on customers and detailed pieces of information about their orders and product info, even if they don't have any orders (Tips : 2 CTE to first join orders and order_details as detailed_orders, then detailed_orders with clients info)."
     ],
 }
 memory_state_df = pd.DataFrame(data)
