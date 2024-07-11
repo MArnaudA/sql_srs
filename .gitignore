@@ -2,3 +2,5 @@
 venv/
 *.csv
 data/test.py
+data/exercises_sql_tables.duckdb
+
