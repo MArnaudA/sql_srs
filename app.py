@@ -181,13 +181,17 @@ conn = duckdb.connect(database="data/exercises_sql_tables.duckdb", read_only=Fal
 with st.sidebar:
     option = get_selected_theme(conn)
     if option:
+        st.session_state.option = option
         # show exercises among the selected theme
-        exercises, question = show_exercise(conn, option)
+        exercises, question = show_exercise(conn, st.session_state.option)
     else:
         # show oldest reviewed exercise among all exercises
         exercises, question = show_exercise_no_option(conn)
     exercise_name = exercises["exercise_name"][0]
     solution_query, solution_df = get_exercise_solution(conn, exercise_name)
+
+    st.write("Exercise : ", exercise_name)
+    button_next_review(conn, exercise_name)
 
 st.write(
     """
@@ -203,6 +207,7 @@ tab1, tab2 = st.tabs(["Tables", "Solution"])
 with tab1:
 
     st.write("Question : ", question)
+    
     get_tables(conn, exercises)
 
     if query:
