@@ -18,7 +18,8 @@ data = {
         "Inner Joins",
         "Left Joins",
         "Left Joins",
-        "Left Joins"
+        "Left Joins",
+        
     ],
     "exercise_name": [
         "beverages_and_food",
