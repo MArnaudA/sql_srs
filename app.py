@@ -23,11 +23,11 @@ def get_tables(conn, exercises):
     Display tables of the selected exercise
 
     Parameters:
-    - conn (duckdb.Connection): The duckdb connection object.
-    - exercises (pandas.DataFrame): The exercises dataframe.
+        conn (duckdb.Connection): The duckdb connection object.
+        exercises (pandas.DataFrame): The exercises dataframe.
 
     Returns:
-    None
+        None
     """
     for table in exercises["tables"][0]:
         df = conn.execute(f"SELECT * FROM {table}").df()
@@ -40,10 +40,10 @@ def get_selected_theme(conn):
     Retrieves the selected theme from the database among themes with exercises.
 
     Parameters:
-    - conn: The database connection object.
+        conn: The database connection object.
 
     Returns:
-    - option: The selected theme.
+        option: The selected theme.
 
     """
     list_unique_themes = conn.execute("SELECT DISTINCT theme FROM memory_state").df()
@@ -96,11 +96,11 @@ def get_exercise_solution(conn, exercise_name):
     Retrieves the solution query and result dataframe for a given exercise.
 
     Parameters:
-    conn (connection): The database connection object.
-    exercise_name (str): The name of the exercise.
+        conn (connection): The database connection object.
+        exercise_name (str): The name of the exercise.
 
     Returns:
-    tuple: A tuple containing the solution query (str) and the result dataframe (pandas.DataFrame).
+        tuple: A tuple containing the solution query (str) and the result dataframe (pandas.DataFrame).
     """
     with open(f"solutions/{exercise_name}.sql", "r") as file:
         solution_query = file.read()
@@ -109,6 +109,22 @@ def get_exercise_solution(conn, exercise_name):
 
 
 def verify_query(conn, solution_df, query):
+    """
+    Verifies the correctness of the query.
+
+    Verify the correctness of the query by comparing the result of the query with the expected result.
+    First, the function executes the query and retrieves the result dataframe.
+    Then, it compares the number of rows and columns and the content of the result with the expected result.
+
+    Parameters:
+        conn (Connection): The database connection object.
+        solution_df (DataFrame): The expected result dataframe.
+        query (str): The query to verify.
+
+    Returns:
+        None
+    """
+
     try:
         result = conn.execute(query).df()
         st.write("The queried dataframe is:", result)
