@@ -3,6 +3,7 @@ import os
 
 import duckdb
 import streamlit as st
+from datetime import date, timedelta
 
 # Create the data folder if it does not exist
 
@@ -126,6 +127,35 @@ def verify_query(conn, solution_df, query):
     except (AttributeError, duckdb.ParserException) as e:
         st.write("Oops! There is a syntax error in your query. Please try again.")
         result = None
+
+def button_next_review(conn, exercise_name):
+    for n_days in [2,7,21]:
+        if st.button(f"Review in {n_days} days"):
+            next_review = date.today() + timedelta(days=n_days)
+            conn.execute(
+                f"""UPDATE memory_state SET last_reviewed = '{next_review}' 
+                WHERE exercise_name = '{exercise_name}'"""
+            )
+            st.write(f"Review scheduled in {n_days} days")
+    
+    if st.button("Reset all review dates"):
+        conn.execute(
+            f"""UPDATE memory_state SET last_reviewed = '2021-09-01'"""
+        )
+        st.write("Review date reset")
+    
+    if st.button("Show review dates"):
+        if "button_show_review_dates" not in st.session_state:
+            st.session_state.button_show_review_dates = True
+        else:
+            if st.session_state.button_show_review_dates:
+                st.session_state.button_show_review_dates = False
+            else:
+                st.session_state.button_show_review_dates = True
+        if st.session_state.button_show_review_dates:
+            review_dates = conn.execute("SELECT exercise_name, last_reviewed FROM memory_state").df()
+            st.write(review_dates)
+
 
 
 # ------------- Streamlit app -------------
